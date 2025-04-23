@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    <title>Phone Shake to micro:bit</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro:bit Accelerometer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             font-family: sans-serif;
@@ -12,74 +12,53 @@
         }
 
         button {
-            font-size: 20px;
-            padding: 15px 30px;
-            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 18px;
         }
 
-        #status {
+        #data {
+            font-size: 24px;
             margin-top: 20px;
-            color: green;
-            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-    <h1>Shake to Send 🚀</h1>
-    <button id="connect">Connect to micro:bit</button>
-    <div id="status">Not connected</div>
+    <h1>Connect to micro:bit</h1>
+    <button id="connect">Connect</button>
+    <div id="data">X: -- Y: -- Z: --</div>
 
     <script>
-        let bluetoothDevice;
-        let txCharacteristic;
-        let lastShake = 0;
-
-        const SHAKE_THRESHOLD = 15; // tweak if needed
+        const SERVICE_UUID = 'e95dfb10-251d-470a-a062-fa1922dfa9a8';
+        const CHARACTERISTIC_UUID = 'e95dfb11-251d-470a-a062-fa1922dfa9a8';
 
         document.getElementById('connect').addEventListener('click', async () => {
             try {
-                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                const device = await navigator.bluetooth.requestDevice({
                     filters: [{ namePrefix: 'BBC micro:bit' }],
-                    optionalServices: ["6e400001-b5a3-f393-e0a9-e50e24dcca9e"]
+                    optionalServices: [SERVICE_UUID]
                 });
 
-                const server = await bluetoothDevice.gatt.connect();
-                const service = await server.getPrimaryService("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
-                txCharacteristic = await service.getCharacteristic("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
+                const server = await device.gatt.connect();
+                const service = await server.getPrimaryService(SERVICE_UUID);
+                const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                document.getElementById('status').textContent = 'Connected ✅';
+                await characteristic.startNotifications();
+
+                characteristic.addEventListener('characteristicvaluechanged', event => {
+                    const value = event.target.value;
+                    const x = value.getInt16(0, true);
+                    const y = value.getInt16(2, true);
+                    const z = value.getInt16(4, true);
+                    document.getElementById('data').textContent = `X: ${x} Y: ${y} Z: ${z}`;
+                });
+
+                console.log('Connected to micro:bit!');
             } catch (error) {
-                console.error(error);
-                document.getElementById('status').textContent = 'Connection failed ❌';
-                alert('Error: ' + error);
-
+                console.error('Connection failed', error);
+                alert('Could not connect: ' + error);
             }
         });
-
-        window.addEventListener('devicemotion', (event) => {
-            if (!txCharacteristic) return;
-
-            const acc = event.accelerationIncludingGravity;
-            const total = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
-            const now = Date.now();
-
-            if (total > SHAKE_THRESHOLD && (now - lastShake) > 2000) {
-                lastShake = now;
-                sendMessage("Anna's phone was shaken!");
-            }
-        });
-
-        async function sendMessage(message) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(message);
-            try {
-                await txCharacteristic.writeValue(data);
-                console.log("Sent:", message);
-            } catch (e) {
-                console.error("Send error:", e);
-            }
-        }
     </script>
 </body>
 
