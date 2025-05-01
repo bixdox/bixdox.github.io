@@ -7,40 +7,7 @@
     <title>AR Audio Manipulation</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
-
-        .controls {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-        }
-
-        .sampleBox {
-            flex-direction: column;
-        }
-
-        .controls label,
-        .controls input {
-            display: block;
-            margin: 5px 0;
-            font-family: Raleway;
-            font-weight: 500;
-        }
-
-        .a-loader-title,
-        .a-loader {
-            display: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body style="margin: 0; overflow: hidden;">
@@ -61,17 +28,48 @@
     </a-scene>
 
     <div class="controls">
+        <div class="sampleBoxMaster">
+            <p>Master Controls</p>
+            <div><label for="masterVolume">Master Volume:</label>
+                <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="1">
+                <label for="masterSpeed">Master Speed:</label>
+                <input type="range" id="masterSpeed" min="0.5" max="2" step="0.1" value="1">
+            </div>
+        </div>
         <div class="sampleBox">
+            <div class="headline">
+                <div>
+                    <p>Controller 01</p>
+                    <p class="typeName">Harmonic Keys</p>
+                </div>
+                <div class="nextToEach">
+                    <div class="circle-container">
+                        <div id="circle1" class="circle filled"></div>
+                        <div id="circle2" class="circle"></div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="23" viewBox="0 0 31 23" fill="none">
+                        <path
+                            d="M31 0H0V20.2212C0 21.7556 1.27267 23 2.84202 23H28.1537C29.723 23 30.9957 21.7556 30.9957 20.2212V5.44836V0H31ZM18.3119 5.44836V15.004H19.7007V21.6505H11.295V15.004H12.6838V5.44836H18.3119ZM1.38016 20.2212V5.44836H8.52177V15.004H9.91484V21.6505H2.84202C2.038 21.6505 1.38016 21.0073 1.38016 20.2212ZM29.6155 20.2212C29.6155 21.0073 28.9577 21.6505 28.1537 21.6505H21.0809V15.004H22.4696V5.44836H29.6155V20.2212Z"
+                            fill="#2B2B2B" />
+                    </svg>
+                </div>
+            </div>
             <audio id="audioHiro" src="sound_1.mp3" controls preload="auto"></audio>
-            <label for="volumeHiro">Hiro Volume:</label>
-            <input type="range" id="volumeHiro" min="0" max="1" step="0.1" value="1">
-            <label for="filterHiro">Hiro Filter:</label>
-            <input type="range" id="filterHiro" min="100" max="5000" step="100" value="1000">
-            <label for="speedHiro">Speed:</label>
-            <input type="range" id="speedHiro" min="0.5" max="2" step="0.1" value="1">
-            <label for="loopHiro">Loop Hiro:</label>
-            <input type="checkbox" id="loopHiro">
-
+            <div class="inputRow">
+                <div>
+                    <label for="volumeHiro">Hiro Volume:</label>
+                    <input type="range" id="volumeHiro" min="0" max="1" step="0.1" value="1">
+                    <label for="filterHiro">Hiro Filter:</label>
+                    <input type="range" id="filterHiro" min="100" max="5000" step="100" value="1000">
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5em;">
+                    <label class="specialLabel">Loop:</label>
+                    <label class="toggleSwitch">
+                        <input type="checkbox" id="loopHiro">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
         </div>
 
         <div class="sampleBox">
@@ -80,8 +78,6 @@
             <input type="range" id="volumeKanji" min="0" max="1" step="0.1" value="1">
             <label for="filterKanji">Kanji Filter:</label>
             <input type="range" id="filterKanji" min="100" max="5000" step="100" value="1000">
-            <label for="speedKanji">Speed:</label>
-            <input type="range" id="speedKanji" min="0.5" max="2" step="0.1" value="1">
             <label for="loopKanji">Loop Kanji:</label>
             <input type="checkbox" id="loopKanji">
 
@@ -93,17 +89,55 @@
             <input type="range" id="volumeLetterA" min="0" max="1" step="0.1" value="1">
             <label for="filterLetterA">LetterA Filter:</label>
             <input type="range" id="filterLetterA" min="100" max="5000" step="100" value="1000">
-            <label for="speedLetterA">Speed:</label>
-            <input type="range" id="speedLetterA" min="0.5" max="2" step="0.1" value="1">
             <label for="loopLetterA">Loop Letter A:</label>
             <input type="checkbox" id="loopLetterA">
 
         </div>
     </div>
+    <script>
+        function updateSliderFillDark(slider) {
+            const percent = 100 * (slider.value - slider.min) / (slider.max - slider.min);
+            slider.style.background = `linear-gradient(to right, #AFAFAF 0%, #AFAFAF ${percent}%, #5C5C5C ${percent}%, #5C5C5C 100%)`;
+        }
+
+        document.querySelectorAll('.sampleBoxMaster input[type="range"]').forEach(slider => {
+            updateSliderFillDark(slider);
+            slider.addEventListener('input', () => updateSliderFillDark(slider));
+        });
+
+    </script>
+    <script>
+        function updateSliderFillLight(slider) {
+            const percent = 100 * (slider.value - slider.min) / (slider.max - slider.min);
+            slider.style.background = `linear-gradient(to right, #55524F 0%, #55524F ${percent}%, #B2B2B2 ${percent}%, #B2B2B2 100%)`;
+        }
+
+        document.querySelectorAll('.sampleBox input[type="range"]').forEach(slider => {
+            updateSliderFillLight(slider);
+            slider.addEventListener('input', () => updateSliderFillLight(slider));
+        });
+    </script>
+
+    <script>
+        let isActive = true; // Control animation with this boolean
+
+        const circle1 = document.getElementById('circle1');
+        const circle2 = document.getElementById('circle2');
+
+        function toggleCircles() {
+            if (!isActive) return;
+
+            circle1.classList.toggle('filled');
+            circle2.classList.toggle('filled');
+        }
+
+        setInterval(toggleCircles, 1000);
+    </script>
 
     <script>
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let isAudioSetup = false;
+        let masterGainNode;
 
         const audioHiro = document.getElementById("audioHiro");
         const audioKanji = document.getElementById("audioKanji");
@@ -120,28 +154,26 @@
         const loopHiroControl = document.getElementById("loopHiro");
         const loopKanjiControl = document.getElementById("loopKanji");
         const loopLetterAControl = document.getElementById("loopLetterA");
+        const masterVolumeControl = document.getElementById("masterVolume");
+        const masterSpeedControl = document.getElementById("masterSpeed");
 
 
 
         let hiroSource, kanjiSource, letterASource, gainNodeHiro, gainNodeKanji, gainNodeLetterA, filterHiro, filterKanji, filterLetterA;
 
-
-
-
         function setupAudioNodes() {
             if (isAudioSetup) return;
 
-            // Create audio source elements
+            masterGainNode = audioContext.createGain();
+
             hiroSource = audioContext.createMediaElementSource(audioHiro);
             kanjiSource = audioContext.createMediaElementSource(audioKanji);
             letterASource = audioContext.createMediaElementSource(audioLetterA);
 
-            // Create gain nodes (volume control)
             gainNodeHiro = audioContext.createGain();
             gainNodeKanji = audioContext.createGain();
             gainNodeLetterA = audioContext.createGain();
 
-            // Create low-pass filters (frequency control)
             filterHiro = audioContext.createBiquadFilter();
             filterHiro.type = "lowpass";
             filterHiro.frequency.value = 1000;
@@ -154,14 +186,15 @@
             filterLetterA.type = "lowpass";
             filterLetterA.frequency.value = 1000;
 
-
-            // Connect the audio chain
-            hiroSource.connect(filterHiro).connect(gainNodeHiro).connect(audioContext.destination);
-            kanjiSource.connect(filterKanji).connect(gainNodeKanji).connect(audioContext.destination);
-            letterASource.connect(filterLetterA).connect(gainNodeLetterA).connect(audioContext.destination);
+            // Connect each source to its gain/filter, then to master gain, then to destination
+            hiroSource.connect(filterHiro).connect(gainNodeHiro).connect(masterGainNode);
+            kanjiSource.connect(filterKanji).connect(gainNodeKanji).connect(masterGainNode);
+            letterASource.connect(filterLetterA).connect(gainNodeLetterA).connect(masterGainNode);
+            masterGainNode.connect(audioContext.destination);
 
             isAudioSetup = true;
         }
+
 
         async function ensureAudioContextRunning() {
             if (audioContext.state === "suspended") {
@@ -176,9 +209,10 @@
         }
 
         function applySpeed() {
-            audioHiro.playbackRate = speedHiroControl.value;
-            audioKanji.playbackRate = speedKanjiControl.value;
-            audioLetterA.playbackRate = speedLetterAControl.value;
+            const speed = parseFloat(masterSpeedControl.value);
+            audioHiro.playbackRate = speed * parseFloat(speedHiroControl.value);
+            audioKanji.playbackRate = speed * parseFloat(speedKanjiControl.value);
+            audioLetterA.playbackRate = speed * parseFloat(speedLetterAControl.value);
         }
 
         document.getElementById("markerHiro").addEventListener("markerFound", async () => {
@@ -231,6 +265,15 @@
                 filterLetterA.frequency.value = e.target.value;
             }
         });
+
+        masterVolumeControl.addEventListener("input", (e) => {
+            if (masterGainNode) {
+                masterGainNode.gain.value = e.target.value;
+            }
+        });
+
+        masterSpeedControl.addEventListener("input", applySpeed);
+
 
         speedHiroControl.addEventListener("input", applySpeed);
         speedKanjiControl.addEventListener("input", applySpeed);

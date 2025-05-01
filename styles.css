@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+        .controls {
+            position: absolute;
+            bottom: 10px;
+            left: 43%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: row;
+            margin: 0px;
+            gap: 20px;
+            color: #FFF;
+            align-items: stretch;
+        }
+
+        .sampleBox {
+            flex-direction: column;
+            border-radius: 12px;
+            border: 1px solid #8E8D8D;
+            background: #E3E3E3;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sampleBox p{
+            color: #000;
+            font-family: "Host Grotesk";
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            margin: 0px;
+        }
+
+        .sampleBox .typeName{
+            color: #7B7B7B;
+            font-family: "Host Grotesk";
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        .sampleBox label{
+            color: #000;
+            font-family: "Host Grotesk";
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .sampleBox .specialLabel{
+          color: #000;
+            font-family: "Host Grotesk";
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;   
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+        .headline{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        
+    .nextToEach{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }  
+
+    svg{
+        display: flex;
+        align-self: flex-start;
+    }
+
+        .inputRow{
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .sampleBoxMaster {
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            border: 2px solid #555;
+            background: #2B2B2B;
+            padding: 25px;
+            font-family: 'Host Grotesk';
+            width: 20%;
+            flex-shrink: 0;
+            justify-content: space-between;
+        }
+
+        .sampleBoxMaster p{
+            color: #FFF;
+            font-family: "Host Grotesk";
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            margin: 0px;
+            margin-bottom: 10px;
+        }
+
+        .sampleBoxMaster label{
+            color: #FFF;
+            font-family: "Host Grotesk";
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .controls label,
+        .controls input {
+            display: block;
+            margin: 5px 0;
+            font-family: 'Host Grotesk';
+            font-weight: 500;
+        }
+
+        .a-loader-title,
+        .a-loader {
+            display: none !important;
+        }
+
+        /*Slider dark*/
+
+        .sampleBoxMaster input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 3px;
+        background: #5C5C5C; /* fallback background */
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        outline: none;
+        }
+
+        .sampleBoxMaster input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 3px;
+        height: 17px; /* Taller for rectangle */
+        background: #AFAFAF;
+        border: none;
+        cursor: pointer;
+        }
+
+         /*Slider light*/
+
+        .sampleBox input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        min-width: 90px;
+        height: 3px;
+        background: #B2B2B2; /* fallback background */
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        outline: none;
+        }
+
+        .sampleBox input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 3px;
+        height: 17px; /* Taller for rectangle */
+        background: #55524F;
+        border: none;
+        cursor: pointer;
+        }
+
+        audio {
+            height: 0px;
+        }
+
+        /*Toggle*/
+        .toggleSwitch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 2px;
+        }
+                
+        .toggleSwitch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggleSwitch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
+            background-color: #707070;
+            transition: 0.4s;
+            border-radius: 1px;
+        }
+
+        .toggleSwitch .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px; width: 14px;
+            left: 4px; bottom: 3px;
+            background-color: #FF7F17;
+            transition: 0.4s;
+            border-radius: 1px;
+        }
+
+        .toggleSwitch input:checked + .slider {
+            background-color: #FF7F17;
+        }
+
+        .toggleSwitch input:checked + .slider:before {
+            transform: translateX(18px);
+        }
+
+        .toggleSwitch input:checked + .slider:after {
+            position: absolute;
+            transform: translateX(18px);
+            content: "";
+            height: 14px; width: 14px;
+            left: 4px; bottom: 3px;
+            background-color: #FFF;
+            transition: 0.2s;
+            border-radius: 1px;
+        }
+
+        /*Circle animation*/
+
+     .circle-container {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .circle {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      background-color: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .filled {
+      background-color: #333;
+      border: 2px solid transparent;
+    }
