@@ -28,6 +28,9 @@
     </a-scene>
 
     <div class="controls">
+        <button class="sampleBox" id="startButton" onclick="startAudio()"><label>Start
+                Audio</label></button>
+
         <div class="sampleBoxMaster">
             <p>Master Controls</p>
             <div><label for="masterVolume">Master Volume:</label>
@@ -62,12 +65,20 @@
                     <label for="filterHiro">Hiro Filter:</label>
                     <input type="range" id="filterHiro" min="100" max="5000" step="100" value="1000">
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.5em;">
-                    <label class="specialLabel">Loop:</label>
-                    <label class="toggleSwitch">
-                        <input type="checkbox" id="loopHiro">
-                        <span class="slider"></span>
-                    </label>
+                <div class="rectangleAndLoopContainer">
+                    <div class="rectangle-container">
+                        <div class="rectangle filled">01</div>
+                        <div class="rectangle">02</div>
+                        <div class="rectangle">03</div>
+                        <div class="rectangle">04</div>
+                    </div>
+                    <div class="loopBox">
+                        <label class="specialLabel">Loop:</label>
+                        <label class="toggleSwitch">
+                            <input type="checkbox" id="loopHiro">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -119,19 +130,12 @@
     </script>
 
     <script>
-        let isActive = true; // Control animation with this boolean
-
-        const circle1 = document.getElementById('circle1');
-        const circle2 = document.getElementById('circle2');
-
-        function toggleCircles() {
-            if (!isActive) return;
-
-            circle1.classList.toggle('filled');
-            circle2.classList.toggle('filled');
+        function startAudio() {
+            audioContext.resume().then(() => {
+                document.getElementById("startButton").style.display = "none";
+                console.log("Audio context started");
+            });
         }
-
-        setInterval(toggleCircles, 1000);
     </script>
 
     <script>
@@ -148,9 +152,6 @@
         const filterHiroControl = document.getElementById("filterHiro");
         const filterKanjiControl = document.getElementById("filterKanji");
         const filterLetterAControl = document.getElementById("filterLetterA");
-        const speedHiroControl = document.getElementById("speedHiro");
-        const speedKanjiControl = document.getElementById("speedKanji");
-        const speedLetterAControl = document.getElementById("speedLetterA");
         const loopHiroControl = document.getElementById("loopHiro");
         const loopKanjiControl = document.getElementById("loopKanji");
         const loopLetterAControl = document.getElementById("loopLetterA");
@@ -158,6 +159,10 @@
         const masterSpeedControl = document.getElementById("masterSpeed");
 
 
+        loopHiroControl.addEventListener('change', () => {
+            console.log('Checked:', loopHiroControl.checked);
+            audioHiro.loop = loopHiroControl.checked;
+        });
 
         let hiroSource, kanjiSource, letterASource, gainNodeHiro, gainNodeKanji, gainNodeLetterA, filterHiro, filterKanji, filterLetterA;
 
@@ -210,14 +215,16 @@
 
         function applySpeed() {
             const speed = parseFloat(masterSpeedControl.value);
-            audioHiro.playbackRate = speed * parseFloat(speedHiroControl.value);
-            audioKanji.playbackRate = speed * parseFloat(speedKanjiControl.value);
-            audioLetterA.playbackRate = speed * parseFloat(speedLetterAControl.value);
         }
 
         document.getElementById("markerHiro").addEventListener("markerFound", async () => {
             await playAudio(audioHiro);
+            markerVisible = true;
             applySpeed(); // Apply speed for Hiro when the marker is found
+        });
+
+        document.getElementById("markerHiro").addEventListener("markerLost", () => {
+            markerVisible = false;
         });
 
         document.getElementById("markerKanji").addEventListener("markerFound", async () => {
@@ -274,15 +281,6 @@
 
         masterSpeedControl.addEventListener("input", applySpeed);
 
-
-        speedHiroControl.addEventListener("input", applySpeed);
-        speedKanjiControl.addEventListener("input", applySpeed);
-        speedLetterAControl.addEventListener("input", applySpeed);
-
-        loopHiroControl.addEventListener("change", () => {
-            audioHiro.loop = loopHiroControl.checked;
-        });
-
         loopKanjiControl.addEventListener("change", () => {
             audioKanji.loop = loopKanjiControl.checked;
         });
@@ -290,6 +288,41 @@
         loopLetterAControl.addEventListener("change", () => {
             audioLetterA.loop = loopLetterAControl.checked;
         });
+
+
+
+    </script>
+
+    <script>
+
+        let animationInterval;
+        let currentCircle = 1;
+
+        function startCircleAnimation() {
+            if (animationInterval) return; // avoid starting twice
+
+            animationInterval = setInterval(() => {
+                const audioPlaying = !audioHiro.paused && !audioHiro.ended;
+                const isLooping = loopHiroControl.checked;
+
+                if ((audioPlaying || isLooping) && markerVisible) {
+                    if (currentCircle === 1) {
+                        circle1.classList.add('filled');
+                        circle2.classList.remove('filled');
+                        currentCircle = 2;
+                    } else {
+                        circle2.classList.add('filled');
+                        circle1.classList.remove('filled');
+                        currentCircle = 1;
+                    }
+                } else {
+                    circle1.classList.remove('filled');
+                    circle2.classList.remove('filled');
+                }
+            }, 1000); // toggle every 1 second
+        }
+
+        startCircleAnimation();
 
     </script>
 

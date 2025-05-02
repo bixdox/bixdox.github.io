@@ -2,8 +2,7 @@
         .controls {
             position: absolute;
             bottom: 10px;
-            left: 43%;
-            transform: translateX(-50%);
+            left: 10px;
             display: flex;
             flex-direction: row;
             margin: 0px;
@@ -67,7 +66,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
 
         
@@ -81,6 +80,45 @@
     svg{
         display: flex;
         align-self: flex-start;
+    }
+
+    .rectangleAndLoopContainer{
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    /*Rectangles of sounds*/
+
+     .rectangle-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+
+    .rectangle {
+      width: 30%;
+      height: auto;
+        border-radius: 3px;
+    border: 1px solid #55524F;
+    background: #E3E3E3;
+    display: flex;
+    padding-left: 3px;
+    padding-right: 3px;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Host Grotesk';
+      font-weight: 700;
+      font-size: 1rem;
+      background-color: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .filled {
+      background-color: #55524F;
+      color: white;
     }
 
         .inputRow{
@@ -100,7 +138,8 @@
             padding: 25px;
             font-family: 'Host Grotesk';
             width: 20%;
-            flex-shrink: 0;
+            min-width: 150px;
+            flex-shrink: 1;
             justify-content: space-between;
         }
 
@@ -188,58 +227,61 @@
             height: 0px;
         }
 
-        /*Toggle*/
-        .toggleSwitch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 2px;
-        }
+.loopBox{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5em;
+    width: 75%;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+/* Toggle */
+
+.toggleSwitch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px; /* must match the slider's height */
+}
                 
-        .toggleSwitch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+.toggleSwitch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
-        .toggleSwitch .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0;
-            right: 0; bottom: 0;
-            background-color: #707070;
-            transition: 0.4s;
-            border-radius: 1px;
-        }
+.toggleSwitch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    background-color: #707070;
+    transition: background-color 0.4s;
+    border-radius: 4px;
+    height: 20px;
+    align-self: flex-end;
+}
 
-        .toggleSwitch .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px; width: 14px;
-            left: 4px; bottom: 3px;
-            background-color: #FF7F17;
-            transition: 0.4s;
-            border-radius: 1px;
-        }
+.toggleSwitch .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px; width: 14px;
+    left: 3px; top: 3px;
+    background-color: #FF7F17;
+    transition: transform 0.4s, background-color 0.2s;
+    border-radius: 4px;
+}
 
-        .toggleSwitch input:checked + .slider {
-            background-color: #FF7F17;
-        }
+.toggleSwitch input:checked + .slider {
+    background-color: #FF7F17;
+}
 
-        .toggleSwitch input:checked + .slider:before {
-            transform: translateX(18px);
-        }
-
-        .toggleSwitch input:checked + .slider:after {
-            position: absolute;
-            transform: translateX(18px);
-            content: "";
-            height: 14px; width: 14px;
-            left: 4px; bottom: 3px;
-            background-color: #FFF;
-            transition: 0.2s;
-            border-radius: 1px;
-        }
+.toggleSwitch input:checked + .slider:before {
+    transform: translateX(18px);
+    background-color: #FFF;
+}
 
         /*Circle animation*/
 
@@ -251,15 +293,15 @@
     }
 
     .circle {
-      width: 11px;
-      height: 11px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       border: 2px solid #333;
       background-color: transparent;
       transition: all 0.3s ease;
     }
 
-    .filled {
+    .circle-container .filled {
       background-color: #333;
       border: 2px solid transparent;
     }
