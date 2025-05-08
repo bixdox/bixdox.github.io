@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
         .controls {
-            position: absolute;
+            position: fixed;
             bottom: 10px;
             left: 10px;
             display: flex;
@@ -17,6 +17,11 @@
         canvas {
   pointer-events: none; /* disables pointer events on A-Frame canvas */
 }
+
+canvas, video, .mindar-ui-overlay {
+    z-index: 1 !important;
+    position: absolute !important;
+  }
 
         .sampleBox {
             flex-direction: column;
