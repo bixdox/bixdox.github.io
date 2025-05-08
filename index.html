@@ -7,24 +7,33 @@
     <title>AR Audio Manipulation</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <a-marker preset="hiro" id="markerHiro">
-            <a-box position="0 0.5 0" material="shader: standard; color: #ffffff;"></a-box>
-        </a-marker>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind;" embedded color-space="sRGB"
+        renderer="colorManagement: true, physicallyCorrectLights: true">
+        <a-assets>
+            <img id="card" src="./test.gif" />
+        </a-assets>
 
-        <a-marker preset="kanji" id="markerKanji">
-            <a-sphere position="0 0.5 0" material="color: red;"></a-sphere>
-        </a-marker>
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        <a-marker preset="letterA" id="markerLetterA">
-            <a-sphere position="0 0.5 0" material="color: orange;"></a-sphere>
-        </a-marker>
+        <a-entity mindar-image-target="targetIndex: 2" id="markerHiro">
+            <a-plane src="#card" position="0 0 0" width="1" height="0.75" color="white"></a-plane>
+        </a-entity>
 
-        <a-entity camera></a-entity>
+        <a-entity mindar-image-target="targetIndex: 1" id="markerKanji">
+            <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"
+                transparent="true"></a-plane>
+        </a-entity>
+
+        <a-entity mindar-image-target="targetIndex: 0" id="markerLetterA">
+            <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"
+                transparent="true"></a-plane>
+        </a-entity>
+
     </a-scene>
 
     <div class="controls">
@@ -43,12 +52,12 @@
             <div class="headline">
                 <div>
                     <p>Controller 01</p>
-                    <p class="typeName">Harmonic Keys</p>
+                    <p class="typeName">Harmonic Synth</p>
                 </div>
                 <div class="nextToEach">
-                    <div class="circle-container">
-                        <div id="circle1" class="circle filled"></div>
-                        <div id="circle2" class="circle"></div>
+                    <div class="circle-container" id="circleContainerHiro">
+                        <div id="circle1Hiro" class="circle filled"></div>
+                        <div id="circle2Hiro" class="circle"></div>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="31" height="23" viewBox="0 0 31 23" fill="none">
                         <path
@@ -57,12 +66,12 @@
                     </svg>
                 </div>
             </div>
-            <audio id="audioHiro" src="sound_1.mp3" controls preload="auto"></audio>
+            <audio id="audioHiro" src="./sounds/synth/synth03.wav" controls preload="auto"></audio>
             <div class="inputRow">
                 <div>
-                    <label for="volumeHiro">Hiro Volume:</label>
+                    <label for="volumeHiro">Volume:</label>
                     <input type="range" id="volumeHiro" min="0" max="1" step="0.1" value="1">
-                    <label for="filterHiro">Hiro Filter:</label>
+                    <label for="filterHiro">Filter:</label>
                     <input type="range" id="filterHiro" min="100" max="5000" step="100" value="1000">
                 </div>
                 <div class="rectangleAndLoopContainer">
@@ -84,25 +93,112 @@
         </div>
 
         <div class="sampleBox">
-            <audio id="audioKanji" src="sound_2.mp3" controls preload="auto"></audio>
-            <label for="volumeKanji">Kanji Volume:</label>
-            <input type="range" id="volumeKanji" min="0" max="1" step="0.1" value="1">
-            <label for="filterKanji">Kanji Filter:</label>
-            <input type="range" id="filterKanji" min="100" max="5000" step="100" value="1000">
-            <label for="loopKanji">Loop Kanji:</label>
-            <input type="checkbox" id="loopKanji">
-
+            <div class="headline">
+                <div>
+                    <p>Controller 02</p>
+                    <p class="typeName">Rhytmic Drums</p>
+                </div>
+                <div class="nextToEach">
+                    <div class="circle-container" id="circleContainerKanji">
+                        <div id="circle1Kanji" class="circle filled"></div>
+                        <div id="circle2Kanji" class="circle"></div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="23" viewBox="0 0 31 23" fill="none">
+                        <g clip-path="url(#clip0_112_25)">
+                            <path d="M30.9437 7.54773H0.00878906V10.637H30.9437V7.54773Z" fill="#2B2B2B" />
+                            <path
+                                d="M0 20.2839C0 21.7953 1.24944 22.9992 2.76525 22.9992H28.1697C29.7089 22.9992 30.9358 21.7945 30.9358 20.2839V11.9967H0V20.2839ZM7.54957 14.5066V13.3548H23.3854V14.5066H24.7719V21.6411H6.16304V14.5066H7.54957ZM29.5527 20.2839C29.5527 21.0285 28.928 21.6411 28.1697 21.6411H26.1515V14.5066H27.538V13.3548H29.5527V20.2839ZM1.40475 13.3548H3.39692V14.5066H4.78345V21.6411H2.76525C2.00691 21.6411 1.40475 21.0277 1.40475 20.2839V13.3548Z"
+                                fill="#2B2B2B" />
+                            <path
+                                d="M8.93458 5.61965C9.71635 5.48844 10.3315 5.15788 10.6595 4.77875L31.0002 1.63239L30.8588 0.816195L30.7174 0L10.4625 3.64476C10.0261 3.39258 9.33371 3.28097 8.55107 3.41132C7.35282 3.61154 6.46694 4.26926 6.57192 4.87928C6.67778 5.48844 7.73546 5.82071 8.93371 5.6205L8.93458 5.61965Z"
+                                fill="#2B2B2B" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_112_25">
+                                <rect width="31" height="23" fill="#2B2B2B" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+            <audio id="audioKanji" src="./sounds/drums/drums02.wav" controls preload="auto"></audio>
+            <div class="inputRow">
+                <div>
+                    <label for="volumeKanji">Volume:</label>
+                    <input type="range" id="volumeKanji" min="0" max="1" step="0.1" value="1">
+                    <label for="filterKanji">Filter:</label>
+                    <input type="range" id="filterKanji" min="100" max="5000" step="100" value="1000">
+                </div>
+                <div class="rectangleAndLoopContainer">
+                    <div class="rectangle-container">
+                        <div class="rectangle">01</div>
+                        <div class="rectangle">02</div>
+                        <div class="rectangle filled">03</div>
+                        <div class="rectangle">04</div>
+                    </div>
+                    <div class="loopBox">
+                        <label class="specialLabel">Loop:</label>
+                        <label class="toggleSwitch">
+                            <input type="checkbox" id="loopKanji">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="sampleBox">
-            <audio id="audioLetterA" src="sound_3.wav" controls preload="auto"></audio>
-            <label for="volumeLetterA">LetterA Volume:</label>
-            <input type="range" id="volumeLetterA" min="0" max="1" step="0.1" value="1">
-            <label for="filterLetterA">LetterA Filter:</label>
-            <input type="range" id="filterLetterA" min="100" max="5000" step="100" value="1000">
-            <label for="loopLetterA">Loop Letter A:</label>
-            <input type="checkbox" id="loopLetterA">
-
+            <div class="headline">
+                <div>
+                    <p>Controller 03</p>
+                    <p class="typeName">Groovy Guitar</p>
+                </div>
+                <div class="nextToEach">
+                    <div class="circle-container" id="circleContainerLetterA">
+                        <div id="circle1LetterA" class="circle filled"></div>
+                        <div id="circle2LetterA" class="circle"></div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="36" viewBox="0 0 32 36" fill="none">
+                        <g clip-path="url(#clip0_112_45)">
+                            <path
+                                d="M29.4634 15.3252L29.1713 15.1018C27.9868 14.1574 27.2806 12.7143 27.2806 11.2485V10.086C27.2806 9.72556 27.4347 9.36777 27.8059 8.998C28.9998 7.81556 29.6564 6.23276 29.6564 4.54755V0H27.5915V4.54755C27.5915 5.6861 27.1479 6.7515 26.2421 7.65329C25.5896 8.30104 25.2157 9.18555 25.2157 10.0873V11.2498C25.2157 13.3327 26.2086 15.3704 27.8903 16.7125L28.1998 16.9492C29.2865 17.7805 29.9351 19.1026 29.9351 20.4819V24.3418C29.9351 29.6409 25.5896 33.9517 20.2511 33.9517H11.7503C6.41179 33.9517 2.06625 29.6409 2.06625 24.3418V20.4819C2.06625 19.076 2.70809 17.7912 3.88593 16.9093L4.11775 16.7085C5.81282 15.3864 6.78565 13.3966 6.78565 11.2498V10.0873C6.78565 9.17224 6.44931 8.33828 5.83426 7.72379L5.69356 7.54955C4.86546 6.72489 4.40853 5.6595 4.40853 4.54755V0H2.34362V4.54755C2.34362 6.20749 3.01361 7.79029 4.16331 8.93549L4.33215 9.13234C4.65508 9.42629 4.72208 9.81334 4.72208 10.0873V11.2498C4.72208 12.7621 4.03601 14.164 2.80189 15.1297L2.58616 15.3172C0.942004 16.5409 0 18.4243 0 20.4806V24.3405C0 30.7714 5.27147 36 11.7503 36H20.2511C26.7299 36 32.0013 30.7714 32.0013 24.3405V20.4806C32.0013 18.4708 31.0526 16.5436 29.4648 15.3252H29.4634Z"
+                                fill="#2B2B2B" />
+                            <path
+                                d="M18.5948 17.2512C20.775 16.2669 22.3012 14.0962 22.3012 11.5664C22.3012 9.03658 20.775 6.86588 18.5948 5.88162V0H16.5299V5.36555C16.3531 5.35092 16.1829 5.31235 16.002 5.31235C15.8211 5.31235 15.6482 5.35092 15.47 5.36555V0H13.4051V5.88295C11.225 6.86854 9.69873 9.03791 9.69873 11.5664C9.69873 14.0949 11.2263 16.2642 13.4051 17.2498V19.8754H10.7466V21.7987H21.2694V19.8754H18.5948V17.2525V17.2512ZM18.5948 8.32897C19.5703 9.10042 20.2363 10.2363 20.2363 11.5677C20.2363 12.8991 19.5703 14.035 18.5948 14.8065V8.32764V8.32897ZM15.47 7.47107C15.6522 7.44713 15.813 7.36466 16.002 7.36466C16.1909 7.36466 16.349 7.44713 16.5299 7.47107V15.667C16.349 15.691 16.1882 15.7734 16.002 15.7734C15.8157 15.7734 15.6522 15.691 15.47 15.667V7.46974V7.47107ZM11.7636 11.5677C11.7636 10.2376 12.4296 9.10042 13.4051 8.3303V14.8065C12.4296 14.035 11.7636 12.8991 11.7636 11.5691V11.5677ZM15.47 17.7686C15.6482 17.7832 15.8197 17.8218 16.002 17.8218C16.1842 17.8218 16.3531 17.7832 16.5299 17.7686V19.8754H15.47V17.7672V17.7686Z"
+                                fill="#2B2B2B" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_112_45">
+                                <rect width="32" height="36" fill="#2B2B2B" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+            <audio id="audioLetterA" src="./sounds/guitar/guitar03.wav" controls preload="auto"></audio>
+            <div class="inputRow">
+                <div>
+                    <label for="volumeLetterA">Volume:</label>
+                    <input type="range" id="volumeLetterA" min="0" max="1" step="0.1" value="1">
+                    <label for="filterLetterA">Filter:</label>
+                    <input type="range" id="filterLetterA" min="100" max="5000" step="100" value="1000">
+                </div>
+                <div class="rectangleAndLoopContainer">
+                    <div class="rectangle-container">
+                        <div class="rectangle">01</div>
+                        <div class="rectangle">02</div>
+                        <div class="rectangle">03</div>
+                        <div class="rectangle filled">04</div>
+                    </div>
+                    <div class="loopBox">
+                        <label class="specialLabel">Loop:</label>
+                        <label class="toggleSwitch">
+                            <input type="checkbox" id="loopLetterA">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
@@ -133,6 +229,8 @@
         function startAudio() {
             audioContext.resume().then(() => {
                 document.getElementById("startButton").style.display = "none";
+                setupAudioNodes(); // <-- ensure nodes are initialized
+
                 console.log("Audio context started");
             });
         }
@@ -142,6 +240,7 @@
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let isAudioSetup = false;
         let masterGainNode;
+        let markerVisible;
 
         const audioHiro = document.getElementById("audioHiro");
         const audioKanji = document.getElementById("audioKanji");
@@ -210,29 +309,40 @@
         async function playAudio(audioElement) {
             await ensureAudioContextRunning();
             setupAudioNodes();
+            audioElement.muted = false;
+
             audioElement.play();
         }
 
         function applySpeed() {
             const speed = parseFloat(masterSpeedControl.value);
+            audioHiro.playbackRate = speed;
+            audioKanji.playbackRate = speed;
+            audioLetterA.playbackRate = speed;
         }
 
-        document.getElementById("markerHiro").addEventListener("markerFound", async () => {
+        document.getElementById("markerHiro").addEventListener("targetFound", async () => {
+            console.log("Marker Hiro found!");
             await playAudio(audioHiro);
             markerVisible = true;
+            startCircleAnimationHiro(); // Start Hiro animation when marker found
             applySpeed(); // Apply speed for Hiro when the marker is found
         });
 
-        document.getElementById("markerHiro").addEventListener("markerLost", () => {
+        document.getElementById("markerHiro").addEventListener("targetLost", () => {
             markerVisible = false;
         });
 
-        document.getElementById("markerKanji").addEventListener("markerFound", async () => {
+        document.getElementById("markerKanji").addEventListener("targetFound", async () => {
+            console.log("Marker Kanji found!");
+            startCircleAnimationKanji(); // Start Kanji animation when marker found
             await playAudio(audioKanji);
             applySpeed(); // Apply speed for Kanji when the marker is found
         });
 
-        document.getElementById("markerLetterA").addEventListener("markerFound", async () => {
+        document.getElementById("markerLetterA").addEventListener("targetFound", async () => {
+            console.log("Marker LetterA found!");
+            startCircleAnimationLetterA(); // Start Kanji animation when marker found
             await playAudio(audioLetterA);
             applySpeed(); // Apply speed for LetterA when the marker is found
         });
@@ -294,35 +404,89 @@
     </script>
 
     <script>
+        // Animation logic for Hiro
+        let animationIntervalHiro;
+        let currentCircleHiro = 1;
 
-        let animationInterval;
-        let currentCircle = 1;
+        function startCircleAnimationHiro() {
+            if (animationIntervalHiro) return; // Avoid starting twice
 
-        function startCircleAnimation() {
-            if (animationInterval) return; // avoid starting twice
+            animationIntervalHiro = setInterval(() => {
+                const audioPlayingHiro = !audioHiro.paused && !audioHiro.ended;
+                const isLoopingHiro = loopHiroControl.checked;
 
-            animationInterval = setInterval(() => {
-                const audioPlaying = !audioHiro.paused && !audioHiro.ended;
-                const isLooping = loopHiroControl.checked;
-
-                if ((audioPlaying || isLooping) && markerVisible) {
-                    if (currentCircle === 1) {
-                        circle1.classList.add('filled');
-                        circle2.classList.remove('filled');
-                        currentCircle = 2;
+                if ((audioPlayingHiro || isLoopingHiro)) {
+                    if (currentCircleHiro === 1) {
+                        document.getElementById('circle1Hiro').classList.add('filled');
+                        document.getElementById('circle2Hiro').classList.remove('filled');
+                        currentCircleHiro = 2;
                     } else {
-                        circle2.classList.add('filled');
-                        circle1.classList.remove('filled');
-                        currentCircle = 1;
+                        document.getElementById('circle2Hiro').classList.add('filled');
+                        document.getElementById('circle1Hiro').classList.remove('filled');
+                        currentCircleHiro = 1;
                     }
                 } else {
-                    circle1.classList.remove('filled');
-                    circle2.classList.remove('filled');
+                    document.getElementById('circle1Hiro').classList.remove('filled');
+                    document.getElementById('circle2Hiro').classList.remove('filled');
                 }
-            }, 1000); // toggle every 1 second
+            }, 1000); // Toggle every 1 second
         }
 
-        startCircleAnimation();
+        // Animation logic for Kanji
+        let animationIntervalKanji;
+        let currentCircleKanji = 1;
+
+        function startCircleAnimationKanji() {
+            if (animationIntervalKanji) return; // Avoid starting twice
+
+            animationIntervalKanji = setInterval(() => {
+                const audioPlayingKanji = !audioKanji.paused && !audioKanji.ended;
+                const isLoopingKanji = loopKanjiControl.checked;
+
+                if ((audioPlayingKanji || isLoopingKanji)) {
+                    if (currentCircleKanji === 1) {
+                        document.getElementById('circle1Kanji').classList.add('filled');
+                        document.getElementById('circle2Kanji').classList.remove('filled');
+                        currentCircleKanji = 2;
+                    } else {
+                        document.getElementById('circle2Kanji').classList.add('filled');
+                        document.getElementById('circle1Kanji').classList.remove('filled');
+                        currentCircleKanji = 1;
+                    }
+                } else {
+                    document.getElementById('circle1Kanji').classList.remove('filled');
+                    document.getElementById('circle2Kanji').classList.remove('filled');
+                }
+            }, 1000); // Toggle every 1 second
+        }
+
+        // Animation logic for LetterA
+        let animationIntervalLetterA;
+        let currentCircleLetterA = 1;
+
+        function startCircleAnimationLetterA() {
+            if (animationIntervalLetterA) return; // Avoid starting twice
+
+            animationIntervalLetterA = setInterval(() => {
+                const audioPlayingLetterA = !audioLetterA.paused && !audioLetterA.ended;
+                const isLoopingLetterA = loopLetterAControl.checked;
+
+                if ((audioPlayingLetterA || isLoopingLetterA)) {
+                    if (currentCircleLetterA === 1) {
+                        document.getElementById('circle1LetterA').classList.add('filled');
+                        document.getElementById('circle2LetterA').classList.remove('filled');
+                        currentCircleLetterA = 2;
+                    } else {
+                        document.getElementById('circle2LetterA').classList.add('filled');
+                        document.getElementById('circle1LetterA').classList.remove('filled');
+                        currentCircleLetterA = 1;
+                    }
+                } else {
+                    document.getElementById('circle1LetterA').classList.remove('filled');
+                    document.getElementById('circle2LetterA').classList.remove('filled');
+                }
+            }, 1000); // Toggle every 1 second
+        }
 
     </script>
 

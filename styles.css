@@ -6,10 +6,17 @@
             display: flex;
             flex-direction: row;
             margin: 0px;
-            gap: 20px;
+            gap: 15px;
             color: #FFF;
             align-items: stretch;
+              z-index: 9999;
+  pointer-events: auto; /* re-enable pointer events for your UI */
+
         }
+
+        canvas {
+  pointer-events: none; /* disables pointer events on A-Frame canvas */
+}
 
         .sampleBox {
             flex-direction: column;
@@ -304,4 +311,29 @@
     .circle-container .filled {
       background-color: #333;
       border: 2px solid transparent;
+    }
+
+    /*Add new controller*/
+
+    .newControllerBox{
+        border-radius: 12px;
+        border: 1px solid #2B2B2B;
+         background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(10px);                /* Applies the blur */
+  -webkit-backdrop-filter: blur(10px);         /* For Safari */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-width: 40%;
+    }
+
+    .newControllerBox p{
+        color: #353535;
+        font-family: "Host Grotesk";
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-align: center;
     }
